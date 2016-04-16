@@ -1,0 +1,29 @@
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2008
+
+Project("{46EDAC1F-9A18-12E2-072B-CCF303017019}") = "Dice Delve", "Assembly-CSharp.csproj", "{399A5D68-1B41-7EB4-9D95-9773674C1761}"
+EndProject
+Project("{46EDAC1F-9A18-12E2-072B-CCF303017019}") = "Dice Delve", "Assembly-CSharp-Editor-firstpass.csproj", "{ACD05170-3D20-1640-92B5-E6A8305D20C6}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{399A5D68-1B41-7EB4-9D95-9773674C1761}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{399A5D68-1B41-7EB4-9D95-9773674C1761}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{399A5D68-1B41-7EB4-9D95-9773674C1761}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{399A5D68-1B41-7EB4-9D95-9773674C1761}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ACD05170-3D20-1640-92B5-E6A8305D20C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ACD05170-3D20-1640-92B5-E6A8305D20C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ACD05170-3D20-1640-92B5-E6A8305D20C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ACD05170-3D20-1640-92B5-E6A8305D20C6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Assembly-CSharp.csproj
+	EndGlobalSection
+EndGlobal
