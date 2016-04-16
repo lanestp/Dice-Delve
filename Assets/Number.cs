@@ -9,30 +9,31 @@ public enum Direction {
 }
 
 public class Number : MonoBehaviour {
-    public List<Mesh> numbers;
+	public List<MeshFilter> numbers;
     MeshFilter meshFilter;
     int currentValue = 1;
     public void SetNumber(int val, Direction dir) {
+        Debug.Log("SetNumber " + val);
         if (val != currentValue) {
-            meshFilter.mesh = Instantiate(numbers[val]);
+            meshFilter.sharedMesh = Instantiate(numbers[val-1].sharedMesh);
             currentValue = val;
         }
         switch (dir)
         {
             case Direction.Down :
-                transform.position = new Vector3(0,0,-1);
+                transform.localPosition = new Vector3(0,-0.45f,-1);
                 break;
             case Direction.Up :
-                transform.position = new Vector3(0,0,1);
+                transform.localPosition = new Vector3(0,-0.45f,1);
                 break;
             case Direction.Left :
-                transform.position = new Vector3(-1,0,0);
+                transform.localPosition = new Vector3(-1,-0.45f,0);
                 break;
             case Direction.Right :
-                transform.position = new Vector3(1,0,0);
+                transform.localPosition = new Vector3(1,-0.45f,0);
                 break;
             case Direction.None :
-                transform.position = new Vector3(0,0,0);
+                transform.localPosition = new Vector3(0,0,0);
                 break;
         }
     }
