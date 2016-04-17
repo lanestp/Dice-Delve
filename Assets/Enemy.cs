@@ -16,7 +16,7 @@ public class Enemy : Rolling {
     public Number number;
     public void Roll(){
         number.transform.DOMoveY(-0.6f,.2f);
-        switch (direction)
+        switch (EnemyDirection)
         {
             case Direction.Down:
                 RollDown(RollDone);
@@ -37,10 +37,10 @@ public class Enemy : Rolling {
     }
     void RollDone(){
         calculateDirection();
-        number.SetNumber(2,direction);
+        number.SetNumber(2,EnemyDirection);
         number.transform.DOMoveY(-0.45f,.2f);
     }
-    public Direction direction;
+    public Direction EnemyDirection;
     private Direction lastDirection;
     void calculateDirection () {
         Direction dir1, dir2;
@@ -48,29 +48,29 @@ public class Enemy : Rolling {
         switch (type)
         {
             case EnemyType.Stand:
-                direction = Direction.None; 
+                EnemyDirection = Direction.None; 
                 break;  
             case EnemyType.Horizontal:
-                if (direction == Direction.None) {direction = lastDirection;}
-                else if (direction != Direction.Left && direction != Direction.Right) {
-                    direction = Direction.Left;
+                if (EnemyDirection == Direction.None) {EnemyDirection = lastDirection;}
+                else if (EnemyDirection != Direction.Left && EnemyDirection != Direction.Right) {
+                    EnemyDirection = Direction.Left;
                 }
-                if (!Map.instance.CanIGo(direction,this.gameObject)) {
-                    direction = (direction == Direction.Left) ? Direction.Right : Direction.Left; 
-                    if (!Map.instance.CanIGo(direction,this.gameObject)) {
-                        direction = Direction.None; 
+                if (!Map.instance.CanIGo(EnemyDirection,this.gameObject)) {
+                    EnemyDirection = (EnemyDirection == Direction.Left) ? Direction.Right : Direction.Left; 
+                    if (!Map.instance.CanIGo(EnemyDirection,this.gameObject)) {
+                        EnemyDirection = Direction.None; 
                     }
                 }
                 break;  
             case EnemyType.Vertical:
-                if (direction == Direction.None) {direction = lastDirection;}
-                else if (direction != Direction.Up && direction != Direction.Down) {
-                    direction = Direction.Down;
+                if (EnemyDirection == Direction.None) {EnemyDirection = lastDirection;}
+                else if (EnemyDirection != Direction.Up && EnemyDirection != Direction.Down) {
+                    EnemyDirection = Direction.Down;
                 }
-                if (!Map.instance.CanIGo(direction,this.gameObject)) {
-                    direction = (direction == Direction.Up) ? Direction.Down : Direction.Up; 
-                    if (!Map.instance.CanIGo(direction,this.gameObject)) {
-                        direction = Direction.None; 
+                if (!Map.instance.CanIGo(EnemyDirection,this.gameObject)) {
+                    EnemyDirection = (EnemyDirection == Direction.Up) ? Direction.Down : Direction.Up; 
+                    if (!Map.instance.CanIGo(EnemyDirection,this.gameObject)) {
+                        EnemyDirection = Direction.None; 
                     }
                 }
                 break;
@@ -91,14 +91,14 @@ public class Enemy : Rolling {
                 }
                 if (!Map.instance.CanIGo(dir1,this.gameObject)) {
                     if (!Map.instance.CanIGo(dir2,this.gameObject)) {
-                        direction = Direction.None; 
+                        EnemyDirection = Direction.None; 
                     }
                     else {
-                        direction = dir2;
+                        EnemyDirection = dir2;
                     }
                 }
                 else {
-                    direction = dir1;
+                    EnemyDirection = dir1;
                 }
                 break;
             case EnemyType.MoveAway:
@@ -118,14 +118,14 @@ public class Enemy : Rolling {
                 }
                 if (!Map.instance.CanIGo(dir1,this.gameObject)) {
                     if (!Map.instance.CanIGo(dir2,this.gameObject)) {
-                        direction = Direction.None; 
+                        EnemyDirection = Direction.None; 
                     }
                     else {
-                        direction = dir2;
+                        EnemyDirection = dir2;
                     }
                 }
                 else {
-                    direction = dir1;
+                    EnemyDirection = dir1;
                 }
                 break;
             case EnemyType.MoveTowardsVisible :
@@ -134,7 +134,7 @@ public class Enemy : Rolling {
                 playerx = Map.round(Map.instance.ThePlayer.transform.position.x);
                 playery = Map.round(Map.instance.ThePlayer.transform.position.z);
                 if (3 < Mathf.Abs(x-playerx) || 3 < Mathf.Abs(y-playery)) {
-                    direction = Direction.None;
+                    EnemyDirection = Direction.None;
                     break; 
                 }
                 else if (Mathf.Abs(x-playerx) < Mathf.Abs(y-playery)){
@@ -149,14 +149,14 @@ public class Enemy : Rolling {
                 }
                 if (!Map.instance.CanIGo(dir1,this.gameObject)) {
                     if (!Map.instance.CanIGo(dir2,this.gameObject)) {
-                        direction = Direction.None; 
+                        EnemyDirection = Direction.None; 
                     }
                     else {
-                        direction = dir2;
+                        EnemyDirection = dir2;
                     }
                 }
                 else {
-                    direction = dir1;
+                    EnemyDirection = dir1;
                 }
                 break;
             case EnemyType.MoveAwayVisible :
@@ -165,7 +165,7 @@ public class Enemy : Rolling {
                 playerx = Map.round(Map.instance.ThePlayer.transform.position.x);
                 playery = Map.round(Map.instance.ThePlayer.transform.position.z);
                 if (3 < Mathf.Abs(x-playerx) || 3 < Mathf.Abs(y-playery)) {
-                    direction = Direction.None;
+                    EnemyDirection = Direction.None;
                     break; 
                 }
                 else if (Mathf.Abs(x-playerx) < Mathf.Abs(y-playery)){
@@ -180,33 +180,33 @@ public class Enemy : Rolling {
                 }
                 if (!Map.instance.CanIGo(dir1,this.gameObject)) {
                     if (!Map.instance.CanIGo(dir2,this.gameObject)) {
-                        direction = Direction.None; 
+                        EnemyDirection = Direction.None; 
                     }
                     else {
-                        direction = dir2;
+                        EnemyDirection = dir2;
                     }
                 }
                 else {
-                    direction = dir1;
+                    EnemyDirection = dir1;
                 }
                 break;
             case EnemyType.Random :
-                direction = (Direction)Random.Range(0,4);
-                if (!Map.instance.CanIGo(direction,this.gameObject)) {
-                    direction = Direction.Down;
-                    if (Map.instance.CanIGo(direction,this.gameObject)) {
+                EnemyDirection = (Direction)Random.Range(0,4);
+                if (!Map.instance.CanIGo(EnemyDirection,this.gameObject)) {
+                    EnemyDirection = Direction.Down;
+                    if (Map.instance.CanIGo(EnemyDirection,this.gameObject)) {
                         break;
                     }
-                    direction = Direction.Up;
-                    if (Map.instance.CanIGo(direction,this.gameObject)) {
+                    EnemyDirection = Direction.Up;
+                    if (Map.instance.CanIGo(EnemyDirection,this.gameObject)) {
                         break;
                     }
-                    direction = Direction.Left;
-                    if (Map.instance.CanIGo(direction,this.gameObject)) {
+                    EnemyDirection = Direction.Left;
+                    if (Map.instance.CanIGo(EnemyDirection,this.gameObject)) {
                         break;
                     }
-                    direction = Direction.Right;
-                    if (Map.instance.CanIGo(direction,this.gameObject)) {
+                    EnemyDirection = Direction.Right;
+                    if (Map.instance.CanIGo(EnemyDirection,this.gameObject)) {
                         break;
                     }
                 }
@@ -214,16 +214,16 @@ public class Enemy : Rolling {
             default:
                 break;
         }
-        if (direction != Direction.None){
-            lastDirection = direction;
+        if (EnemyDirection != Direction.None){
+            lastDirection = EnemyDirection;
         }
-        number.SetNumber(1,direction);
+        number.SetNumber(1,EnemyDirection);
     }
 	// Use this for initialization
 	void Start () {
         calculateDirection();
-        lastDirection = direction;
-        number.SetNumber(1,direction);
+        lastDirection = EnemyDirection;
+        number.SetNumber(1,EnemyDirection);
         number.transform.DOMoveY(-0.45f,.2f);
 	}
 	

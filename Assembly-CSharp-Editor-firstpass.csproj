@@ -47,6 +47,8 @@
   <ItemGroup>
      <Compile Include="Assets\Plugins\Editor\VSCode.cs" />
      <None Include="Assets\Demigiant\DOTween\readme.txt" />
+     <None Include="Assets\Resources\DungeonV1.txt" />
+     <None Include="Assets\Resources\DungeonV1Enemies.txt" />
  <Reference Include="UnityEngine.Networking">
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll</HintPath>
  </Reference>
