@@ -18,9 +18,8 @@ public class Map : MonoBehaviour {
 		return Tile [Random.Range (0, Tile.Count)];
 	}
     public void Roll() {
-        foreach (var item in Enemies)
-        {
-            
+        foreach (var item in Enemies) {
+            item.Roll();
         }
     }
     public static int round(float num){
@@ -52,17 +51,19 @@ public class Map : MonoBehaviour {
             case Direction.None :
                 return true;
         }
-        Debug.Log(xPos + " " + yPos + " " + direction);
+        //Debug.Log(xPos + " " + yPos + " " + direction);
         if (xPos < 0 || yPos < 0 || XSize < xPos || YSize < yPos) {
             return false;
         }
-        if (xPos == round(ThePlayer.transform.position.x) && yPos == round(ThePlayer.transform.position.z) ) {
+        if ((xPos == round(ThePlayer.transform.position.x) && yPos == round(ThePlayer.transform.position.z) ) ||
+            (xPos == round(ThePlayer.newPos.x) && yPos == round(ThePlayer.newPos.z) )) {
             return false;
         }
         if (Obstacles != null && Obstacles.Count > 0) {
             foreach (var item in Obstacles)
             {
-                if (xPos == round(item.transform.position.x) && yPos == round(item.transform.position.z)) {
+                if ((xPos == round(item.transform.position.x) && yPos == round(item.transform.position.z)) ||
+                    (xPos == round(item.newPos.x) && yPos == round(item.newPos.z))) {
                     return false;
                 }
             }

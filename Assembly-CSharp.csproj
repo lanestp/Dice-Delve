@@ -50,6 +50,7 @@
      <Compile Include="Assets\Enemy.cs" />
      <Compile Include="Assets\Follow.cs" />
      <Compile Include="Assets\GameModel.cs" />
+     <Compile Include="Assets\HudViewController.cs" />
      <Compile Include="Assets\Map.cs" />
      <Compile Include="Assets\Number.cs" />
      <Compile Include="Assets\Player.cs" />

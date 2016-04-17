@@ -11,9 +11,10 @@ public enum Direction {
 public class Number : MonoBehaviour {
 	public List<MeshFilter> numbers;
     MeshFilter meshFilter;
+    Renderer render;
     int currentValue = 1;
     public void SetNumber(int val, Direction dir) {
-        Debug.Log("SetNumber " + val);
+        //Debug.Log("SetNumber " + val);
         if (val != currentValue) {
             meshFilter.sharedMesh = Instantiate(numbers[val-1].sharedMesh);
             currentValue = val;
@@ -21,19 +22,24 @@ public class Number : MonoBehaviour {
         switch (dir)
         {
             case Direction.Down :
-                transform.localPosition = new Vector3(0,-0.45f,-1);
+                render.enabled = true;
+                transform.localPosition = new Vector3(0,transform.localPosition.y,-1);
                 break;
             case Direction.Up :
-                transform.localPosition = new Vector3(0,-0.45f,1);
+                render.enabled = true;
+                transform.localPosition = new Vector3(0,transform.localPosition.y,1);
                 break;
             case Direction.Left :
-                transform.localPosition = new Vector3(-1,-0.45f,0);
+                render.enabled = true;
+                transform.localPosition = new Vector3(-1,transform.localPosition.y,0);
                 break;
             case Direction.Right :
-                transform.localPosition = new Vector3(1,-0.45f,0);
+                render.enabled = true;
+                transform.localPosition = new Vector3(1,transform.localPosition.y,0);//-0.45f
                 break;
             case Direction.None :
-                transform.localPosition = new Vector3(0,0,0);
+                render.enabled = false;
+                transform.localPosition = new Vector3(0,transform.localPosition.y,0);
                 break;
         }
     }
@@ -41,8 +47,9 @@ public class Number : MonoBehaviour {
         
     }
 	// Use this for initialization
-	void Start () {
+	void Awake () {
 	    meshFilter = GetComponent<MeshFilter>();
+        render = GetComponent<Renderer>();
 	}
 	
 	// Update is called once per frame

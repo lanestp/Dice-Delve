@@ -8,6 +8,7 @@ public class Rolling : MonoBehaviour {
     public List<SideValue> Values;
     public GameObject child;
     bool isRolling = false;
+    public Vector3 newPos;
     public int FaceValue(Direction dir) {
         foreach (var item in Values) {
            switch (dir) {
@@ -34,6 +35,7 @@ public class Rolling : MonoBehaviour {
     int showingFace;
     IEnumerator Roll(Vector3 rot, Vector3 move, Action callback) {
        isRolling = true;
+       newPos = transform.position + move;
        yield return new WaitForEndOfFrame();
        transform.DOBlendableLocalRotateBy(rot,0.5f,RotateMode.LocalAxisAdd);
        transform.DOBlendableLocalMoveBy(move,0.5f,false);
@@ -83,6 +85,7 @@ public class Rolling : MonoBehaviour {
 	// Use this for initialization
 	void Awake () {
        showingFace = FaceValue(Direction.None);
+       newPos = transform.position;
 	}
 	
 	// Update is called once per frame
