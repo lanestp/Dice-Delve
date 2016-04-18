@@ -11,10 +11,12 @@ public class Rolling : MonoBehaviour {
     public bool isRolling = false;
     public Vector3 newPos;
     public Direction direction = Direction.None;
-    public void Damaged() {
+    public virtual void Damaged() {
+    }
+    public virtual void Attack() {
         
     }
-    public void Attack() {
+    public virtual void Die(){
         
     }
     public int FaceValue(Direction dir) {

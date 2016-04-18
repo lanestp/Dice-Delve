@@ -3,14 +3,21 @@ using System.Collections;
 using System.Collections.Generic;
 
 public class Map : MonoBehaviour {
+    public Obstacle Goal;
+    public Enemy E1;
+    public Enemy E2;
+    public Enemy E3;
+    public Obstacle Mana;
+    public Obstacle Health;
     public static Map instance = null;
 	public List<GameObject> Tile;
     public GameObject Wall;
 	public Player ThePlayer;
 	public List<Enemy> Enemies;
-	private List<Rolling> Obstacles;
+	public List<Obstacle> Obstacles;
 	private List<List<Renderer>> Floor;
 	private List<List<string>> mapData;
+	private List<List<string>> enemyMapData;
 	private List<List<Renderer>> Walls;
 
     int XSize = 100;
@@ -107,11 +114,14 @@ public class Map : MonoBehaviour {
         
     }
     public void RollDone(){
+        List<Enemy> en = new List<Enemy>();
+        if (Enemies.Count > 0) {
         foreach (var item in Enemies) {
             if ((round(item.transform.position.x-ThePlayer.transform.position.x) == 0 && round(Mathf.Abs(item.transform.position.z-ThePlayer.transform.position.z)) == 1)
             || (round(item.transform.position.z-ThePlayer.transform.position.z) == 0 && round(Mathf.Abs(item.transform.position.x-ThePlayer.transform.position.x)) == 1)) {
+                Debug.Log("enemy " + item.FaceValue(Direction.None) + " player " + ThePlayer.FaceValue(Direction.None));
                 if (item.FaceValue(Direction.None) < ThePlayer.FaceValue(Direction.None)) {
-                    item.Damaged();
+                    en.Add(item);
                     ThePlayer.Attack();
                 }   
                 else {
@@ -121,7 +131,21 @@ public class Map : MonoBehaviour {
             }
             item.Roll();
             item.render.enabled = (Mathf.Abs(item.transform.position.x-ThePlayer.transform.position.x) < 10 && Mathf.Abs(item.transform.position.z-ThePlayer.transform.position.z) < 10);
-        }        
+        }    
+        for (var i = 0; i < en.Count; ++i) {
+                    en[i].Damaged();
+        }    
+        }
+        Obstacle ob = null;
+        foreach (var item in Obstacles) {
+            item.render.enabled = (Mathf.Abs(item.transform.position.x-ThePlayer.transform.position.x) < 10 && Mathf.Abs(item.transform.position.z-ThePlayer.transform.position.z) < 10);
+            if (round(item.transform.position.x-ThePlayer.transform.position.x) == 0 && round(item.transform.position.z-ThePlayer.transform.position.z) == 0){
+                ob = item;
+            }
+        }
+        if (ob != null){
+            ob.Collect();
+        }
     }
     public static int round(float num){
         return (int)Mathf.Round(num);
@@ -160,8 +184,8 @@ public class Map : MonoBehaviour {
             (xPos == round(ThePlayer.newPos.x) && yPos == round(ThePlayer.newPos.z) )) {
             return false;
         }
-        if (Obstacles != null && Obstacles.Count > 0) {
-            foreach (var item in Obstacles)
+        if (Enemies != null && Enemies.Count > 0) {
+            foreach (var item in Enemies)
             {
                 if ((xPos == round(item.transform.position.x) && yPos == round(item.transform.position.z)) ||
                     (xPos == round(item.newPos.x) && yPos == round(item.newPos.z))) {
@@ -204,6 +228,30 @@ public class Map : MonoBehaviour {
                 //}
 			}
 		}
+        Enemies = new List<Enemy>();
+        Obstacles = new List<Obstacle>();
+		for (var y = 0; y < enemyMapData.Count; y++) {
+		    for (var x = 0; x < enemyMapData[y].Count; x++) {
+                if (enemyMapData[y][x] == "1") {
+                    Enemies.Add(((GameObject)Instantiate (E1.gameObject, new Vector3 (x, 0f, y), Quaternion.identity)).GetComponent<Enemy>());
+                }
+                else if (enemyMapData[y][x] == "2") {
+                    Enemies.Add(((GameObject)Instantiate (E2.gameObject, new Vector3 (x, 0f, y), Quaternion.identity)).GetComponent<Enemy>());
+                }
+                else if (enemyMapData[y][x] == "3") {
+                    Enemies.Add(((GameObject)Instantiate (E3.gameObject, new Vector3 (x, 0f, y), Quaternion.identity)).GetComponent<Enemy>());
+                }
+                else if (enemyMapData[y][x] == "M") {
+                    Obstacles.Add(((GameObject)Instantiate (Mana.gameObject, new Vector3 (x, 0f, y), Quaternion.identity)).GetComponent<Obstacle>());
+                }
+                else if (enemyMapData[y][x] == "H") {
+                    Obstacles.Add(((GameObject)Instantiate (Health.gameObject, new Vector3 (x, 0f, y), Quaternion.identity)).GetComponent<Obstacle>());
+                }
+                else if (enemyMapData[y][x] == "G") {
+                    Obstacles.Add(((GameObject)Instantiate (Goal.gameObject, new Vector3 (x, 0f, y), Quaternion.identity)).GetComponent<Obstacle>());
+                }
+			}
+		}
 	}
     void Awake(){
          if (instance == null)
@@ -221,6 +269,19 @@ public class Map : MonoBehaviour {
                 l.Add(i);
              }
              mapData.Add(l);
+         }
+
+         level = Resources.Load("DungeonV1Enemies") as TextAsset;
+         a = level.text.Split("\n"[0]);
+         
+         enemyMapData = new List<List<string>>(); 
+         foreach (var item in a) {
+             var l = new List<string>();
+             var b = item.Split("\t"[0]);
+             foreach (var i in b) {
+                l.Add(i);
+             }
+             enemyMapData.Add(l);
          }
     }
 	

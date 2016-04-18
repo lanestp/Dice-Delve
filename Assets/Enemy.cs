@@ -15,7 +15,23 @@ public class Enemy : Rolling {
     public EnemyType type;
     public Number number;
     public void Roll(){
-        number.transform.DOMoveY(-0.6f,.2f);
+        if (!render.enabled){return;}
+        if (type == EnemyType.MoveTowardsVisible) {
+                int x = Map.round(transform.position.x);
+                int y = Map.round(transform.position.z);
+                int playerx = Map.round(Map.instance.ThePlayer.transform.position.x);
+                int playery = Map.round(Map.instance.ThePlayer.transform.position.z);
+                if ((Mathf.Abs(x - playerx) == 1 && Mathf.Abs(y - playery) == 0) ||
+                    (Mathf.Abs(x - playerx) == 0 && Mathf.Abs(y - playery) == 1) || 
+                    (Mathf.Abs(x - Map.round(Map.instance.ThePlayer.newPos.x)) == 0 && Mathf.Abs(y - Map.round(Map.instance.ThePlayer.newPos.z)) == 1) ||
+                    (Mathf.Abs(x - Map.round(Map.instance.ThePlayer.newPos.x)) == 1 && Mathf.Abs(y - Map.round(Map.instance.ThePlayer.newPos.z)) == 0)){
+                        EnemyDirection = Direction.None; 
+                }
+
+            //calculateDirection();
+        }
+        number.transform.position = new Vector3(number.transform.position.x,-0.6f,number.transform.position.z);
+        //number.transform.DOMoveY(-0.6f,.15f);
         switch (EnemyDirection)
         {
             case Direction.Down:
@@ -35,16 +51,35 @@ public class Enemy : Rolling {
                 break;
         }
     }
+    public override void Damaged() {
+        Die();
+    }
+    public override void Attack() {
+        transform.DOMoveY(.1f,.1f).OnComplete(()=>{
+            transform.DOMoveY(0f,.1f);
+        });
+
+    }
+    public override void Die(){
+        Map.instance.Enemies.Remove(this);
+        transform.DOScale(Vector3.zero,0.5f).OnComplete(()=>{
+            Destroy(this.gameObject);
+        });
+        
+    }
+
     void RollDone(){
         calculateDirection();
-        number.SetNumber(2,EnemyDirection);
-        number.transform.DOMoveY(-0.45f,.2f);
+        number.SetNumber(FaceValue(EnemyDirection),EnemyDirection);
+        number.transform.position = new Vector3(number.transform.position.x,-0.5f,number.transform.position.z);
+
+        //number.transform.DOMoveY(-0.5f,.2f);
     }
     public Direction EnemyDirection;
     private Direction lastDirection;
     void calculateDirection () {
         Direction dir1, dir2;
-        int x, y, playerx, playery;
+        int x, y, playerx, playery, newplayerx, newplayery;
         switch (type)
         {
             case EnemyType.Stand:
@@ -79,6 +114,10 @@ public class Enemy : Rolling {
                 y = Map.round(transform.position.z);
                 playerx = Map.round(Map.instance.ThePlayer.transform.position.x);
                 playery = Map.round(Map.instance.ThePlayer.transform.position.z);
+                /*if ((x == playerx && y == playery) || (x == Map.instance.ThePlayer.newPos.x && y == Map.instance.ThePlayer.newPos.z){
+                        EnemyDirection = Direction.None; 
+                        break;                    
+                }*/
                 if (Mathf.Abs(x-playerx) < Mathf.Abs(y-playery)){
                     Debug.Log("Move Y");
                     dir1 = (y < playery) ? Direction.Up : Direction.Down;
@@ -133,7 +172,14 @@ public class Enemy : Rolling {
                 y = Map.round(transform.position.z);
                 playerx = Map.round(Map.instance.ThePlayer.transform.position.x);
                 playery = Map.round(Map.instance.ThePlayer.transform.position.z);
-                if (3 < Mathf.Abs(x-playerx) || 3 < Mathf.Abs(y-playery)) {
+                if ((Mathf.Abs(x - playerx) == 1 && Mathf.Abs(y - playery) == 0) ||
+                    (Mathf.Abs(x - playerx) == 0 && Mathf.Abs(y - playery) == 1) || 
+                    (Mathf.Abs(x - Map.round(Map.instance.ThePlayer.newPos.x)) == 0 && Mathf.Abs(y - Map.round(Map.instance.ThePlayer.newPos.z)) == 1) ||
+                    (Mathf.Abs(x - Map.round(Map.instance.ThePlayer.newPos.x)) == 1 && Mathf.Abs(y - Map.round(Map.instance.ThePlayer.newPos.z)) == 0)){
+                        EnemyDirection = Direction.None; 
+                        break;                    
+                }
+                if (4 < Mathf.Abs(x-playerx) || 4 < Mathf.Abs(y-playery)) {
                     EnemyDirection = Direction.None;
                     break; 
                 }
@@ -217,18 +263,21 @@ public class Enemy : Rolling {
         if (EnemyDirection != Direction.None){
             lastDirection = EnemyDirection;
         }
-        number.SetNumber(1,EnemyDirection);
+        //number.SetNumber(FaceValue(EnemyDirection),EnemyDirection);
+        Debug.Log(FaceValue(EnemyDirection));
     }
 	// Use this for initialization
 	void Start () {
         calculateDirection();
         lastDirection = EnemyDirection;
-        number.SetNumber(1,EnemyDirection);
-        number.transform.DOMoveY(-0.45f,.2f);
+        number.SetNumber(FaceValue(EnemyDirection),EnemyDirection);
+        number.transform.position = new Vector3(number.transform.position.x,-0.6f,number.transform.position.z);
+        //number.transform.DOMoveY(-0.5f,.2f);
 	}
 	
 	// Update is called once per frame
 	void Update () {
 	
 	}
+    
 }

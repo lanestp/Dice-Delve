@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 
 public class HudViewController : MonoBehaviour {
+    public Canvas Menu;
     public Image HeartImage;
     public Image ManaImage;
 	public Transform HeartParent;
@@ -32,6 +33,10 @@ public class HudViewController : MonoBehaviour {
                     m.transform.localScale = new Vector3(1,1,1);
             Hearts.Add(m);
         }
+        Spellbook.onClick.AddListener(()=>{
+            gameObject.SetActive(false);
+            Menu.gameObject.SetActive(true);
+        });
         ManaToHealth.onClick.AddListener(()=>{
             if (GameModel.instance.Mana > 0 && !Map.instance.ThePlayer.isRolling) {
                 GameModel.instance.Mana--;
@@ -47,7 +52,7 @@ public class HudViewController : MonoBehaviour {
             }
         });
         HealthToMana.onClick.AddListener(()=>{
-            if (GameModel.instance.Health > 0 && !Map.instance.ThePlayer.isRolling) {
+            if (GameModel.instance.Health > 1 && !Map.instance.ThePlayer.isRolling) {
                 GameModel.instance.Mana++;
                 GameModel.instance.Health--;
                 Map.instance.ThePlayer.CastSpell(new Color(0xaa/255f,0,0,128/255f));
